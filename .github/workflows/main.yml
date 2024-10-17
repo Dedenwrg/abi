@@ -14,24 +14,29 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
     
-    # Step 2: Setup dependencies (e.g., installing make)
-    - name: Install Dependencies
-      run: sudo apt-get update && sudo apt-get install -y make
-    
-    # Step 3: Run the make contract command
-    - name: Build contract
+    # Step 2: Clone the autonity repository
+    - name: Clone Autonity Repository
       run: |
         git clone https://github.com/autonity/autonity.git
         cd autonity
+    
+    # Step 3: Install Dependencies
+    - name: Install Dependencies
+      run: sudo apt-get update && sudo apt-get install -y make
+    
+    # Step 4: Build contract
+    - name: Build contract
+      run: |
+        cd autonity
         make contract
     
-    # Step 4: Check if ABI files exist and create a folder if it doesn't
+    # Step 5: Create ABI folder and copy ABI files
     - name: Create ABI folder
       run: |
         mkdir -p ./abi
         cp autonity/params/generated/*.abi ./abi/
     
-    # Step 5: Commit and push ABI files
+    # Step 6: Commit and Push ABI files
     - name: Commit and Push ABI files
       uses: stefanzweifel/git-auto-commit-action@v4
       with:
