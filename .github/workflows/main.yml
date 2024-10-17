@@ -14,30 +14,33 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
     
-    # Step 2: Clone the autonity repository
+    # Step 2: Clone the Autonity repository
     - name: Clone Autonity Repository
+      run: git clone https://github.com/autonity/autonity.git
+    
+    # Step 3: Checkout the specific tag
+    - name: Checkout Tag v0.14.1
       run: |
-        git clone https://github.com/autonity/autonity.git
         cd autonity
         git checkout tags/v0.14.1 -b v0.14.1
     
-    # Step 3: Install Dependencies
+    # Step 4: Install Dependencies
     - name: Install Dependencies
       run: sudo apt-get update && sudo apt-get install -y make
     
-    # Step 4: Build contract
-    - name: Build contract
+    # Step 5: Build contracts
+    - name: Build contracts
       run: |
         cd autonity
-        make contract
+        make contracts
     
-    # Step 5: Create ABI folder and copy ABI files
+    # Step 6: Create ABI folder and copy ABI files
     - name: Create ABI folder
       run: |
         mkdir -p ./abi
         cp autonity/params/generated/*.abi ./abi/
     
-    # Step 6: Commit and Push ABI files
+    # Step 7: Commit and Push ABI files
     - name: Commit and Push ABI files
       uses: stefanzweifel/git-auto-commit-action@v4
       with:
