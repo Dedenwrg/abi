@@ -50,7 +50,12 @@ jobs:
           jq '.' "$abi_file" > "$json_file"
         done
     
-    # Step 8: Commit and Push ABI files
+    # Step 8: Pull latest changes before commit
+    - name: Pull latest changes
+      run: |
+        git pull origin main || echo "No changes to pull"
+
+    # Step 9: Commit and Push ABI files
     - name: Commit and Push ABI files
       uses: stefanzweifel/git-auto-commit-action@v4
       with:
