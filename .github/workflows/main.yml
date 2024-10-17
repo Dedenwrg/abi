@@ -19,6 +19,7 @@ jobs:
       run: |
         git clone https://github.com/autonity/autonity.git
         cd autonity
+        git checkout tags/v0.14.1 -b v0.14.1
     
     # Step 3: Install Dependencies
     - name: Install Dependencies
