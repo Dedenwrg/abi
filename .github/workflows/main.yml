@@ -26,7 +26,7 @@ jobs:
     
     # Step 4: Install Dependencies
     - name: Install Dependencies
-      run: sudo apt-get update && sudo apt-get install -y make
+      run: sudo apt-get update && sudo apt-get install -y make jq
     
     # Step 5: Build contracts
     - name: Build contracts
@@ -40,9 +40,19 @@ jobs:
         mkdir -p ./abi
         cp autonity/params/generated/*.abi ./abi/
     
-    # Step 7: Commit and Push ABI files
+    # Step 7: Convert ABI files to JSON format
+    - name: Convert ABI to JSON
+      run: |
+        for abi_file in ./abi/*.abi; do
+          # Ganti ekstensi .abi dengan .json
+          json_file="${abi_file%.abi}.json"
+          # Konversi file ABI ke JSON
+          jq '.' "$abi_file" > "$json_file"
+        done
+    
+    # Step 8: Commit and Push ABI files
     - name: Commit and Push ABI files
       uses: stefanzweifel/git-auto-commit-action@v4
       with:
-        commit_message: "Upload ABI files"
-        file_pattern: "./abi/*.abi"
+        commit_message: "Upload ABI files in JSON format"
+        file_pattern: "./abi/*.json"
